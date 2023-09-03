@@ -117,25 +117,25 @@ def send_notification(title, msg):
 def auto_action(label, find_by, el_type, action, value, sleep_time=0):
     print("\t"+ label +":", end="")
     # Find Element By
-    match find_by.lower():
-        case 'id':
-            item = driver.find_element(By.ID, el_type)
-        case 'name':
-            item = driver.find_element(By.NAME, el_type)
-        case 'class':
-            item = driver.find_element(By.CLASS_NAME, el_type)
-        case 'xpath':
-            item = driver.find_element(By.XPATH, el_type)
-        case _:
-            return 0
+    if find_by.lower() == 'id':
+        item = driver.find_element(By.ID, el_type)
+    elif find_by.lower() == 'name':
+        item = driver.find_element(By.NAME, el_type)
+    elif find_by.lower() == 'class':
+        item = driver.find_element(By.CLASS_NAME, el_type)
+    elif find_by.lower() == 'xpath':
+        item = driver.find_element(By.XPATH, el_type)
+    else:
+        return 0
+
     # Do Action:
-    match action.lower():
-        case 'send':
-            item.send_keys(value)
-        case 'click':
-            item.click()
-        case _:
-            return 0
+    if action.lower() == 'send':
+        item.send_keys(value)
+    elif action.lower() == 'click':
+        item.click()
+    else:
+        return 0
+
     print("\t\tCheck!")
     if sleep_time:
         time.sleep(sleep_time)
@@ -230,7 +230,9 @@ def info_logger(file_path, log):
 
 
 if LOCAL_USE:
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    driver_path = "C:\chromedriver.exe"
+    driver = webdriver.Chrome(service=Service(driver_path))
 else:
     driver = webdriver.Remote(command_executor=HUB_ADDRESS, options=webdriver.ChromeOptions())
 
