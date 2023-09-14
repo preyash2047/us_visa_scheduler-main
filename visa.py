@@ -224,10 +224,10 @@ def get_available_date(dates):
 
 EMBASSY_COUNTER = 0
 def update_embassy():
-    global Embassies,YOUR_EMBASSY,EMBASSY,FACILITY_ID,REGEX_CONTINUE,SIGN_IN_LINK,APPOINTMENT_URL,DATE_URL,TIME_URL,SIGN_OUT_LINK
+    global Embassies,config,YOUR_EMBASSY,EMBASSY,FACILITY_ID,REGEX_CONTINUE,SIGN_IN_LINK,APPOINTMENT_URL,DATE_URL,TIME_URL,SIGN_OUT_LINK,EMBASSY_COUNTER
     if EMBASSY_COUNTER > len(list(Embassies)):
         EMBASSY_COUNTER = 0
-    YOUR_EMBASSY = config['PERSONAL_INFO'][list(Embassies)[EMBASSY_COUNTER]]
+    YOUR_EMBASSY = list(Embassies)[EMBASSY_COUNTER]
     EMBASSY = Embassies[YOUR_EMBASSY][0]
     FACILITY_ID = Embassies[YOUR_EMBASSY][1]
     REGEX_CONTINUE = Embassies[YOUR_EMBASSY][2] 
@@ -237,10 +237,6 @@ def update_embassy():
     DATE_URL = f"https://ais.usvisa-info.com/{EMBASSY}/niv/schedule/{SCHEDULE_ID}/appointment/days/{FACILITY_ID}.json?appointments[expedite]=false"
     TIME_URL = f"https://ais.usvisa-info.com/{EMBASSY}/niv/schedule/{SCHEDULE_ID}/appointment/times/{FACILITY_ID}.json?date=%s&appointments[expedite]=false"
     SIGN_OUT_LINK = f"https://ais.usvisa-info.com/{EMBASSY}/niv/users/sign_out"
-
-    print("EMBASSY", EMBASSY)
-    print("FACILITY_ID", FACILITY_ID)
-    print("REGEX_CONTINUE", REGEX_CONTINUE)
     EMBASSY_COUNTER += 1
 
 def info_logger(file_path, log):
@@ -295,7 +291,7 @@ if __name__ == "__main__":
                     # A good date to schedule for
                     END_MSG_TITLE, msg = reschedule(date)
                     break
-                update_embassy()
+                # update_embassy()
                 RETRY_WAIT_TIME = random.randint(RETRY_TIME_L_BOUND, RETRY_TIME_U_BOUND)
                 t1 = time.time()
                 total_time = t1 - t0
