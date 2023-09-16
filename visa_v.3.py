@@ -83,8 +83,8 @@ class VisaScheduler:
         self.USERNAME = USERNAME
         self.PASSWORD = PASSWORD
         self.SCHEDULE_ID = SCHEDULE_ID
-        self.PRIOD_START = PRIOD_START.strftime('%Y-%m-%d')
-        self.PRIOD_END = PRIOD_END.strftime('%Y-%m-%d')
+        self.PRIOD_START = PRIOD_START
+        self.PRIOD_END = PRIOD_END
         self.YOUR_EMBASSY = YOUR_EMBASSY
         self.Embassies = Embassies
         
@@ -301,6 +301,7 @@ class VisaScheduler:
                 if date:
                     # A good date to schedule for
                     END_MSG_TITLE, msg = self.reschedule(date)
+                    self.END_MSG_TITLE = END_MSG_TITLE
                     break
                 self.update_embassy()
                 self.RETRY_WAIT_TIME = random.randint(RETRY_TIME_L_BOUND, RETRY_TIME_U_BOUND)
@@ -340,10 +341,12 @@ for index, row in df.iterrows():
     username = row['USERNAME']
     password = row['PASSWORD']
     schedule_id = row['SCHEDULE_ID']
-    period_start = row['PRIOD_START']
-    period_end = row['PRIOD_END']
+    period_start = row['PRIOD_START'].strftime('%Y-%m-%d')
+    period_end = row['PRIOD_END'].strftime('%Y-%m-%d')
     your_embassy = row['YOUR_EMBASSY']
 
     # Call the function to run the visa scheduler for the current user
     visa_scheduler = VisaScheduler(username,password,schedule_id,period_start,period_end,your_embassy, Embassies)
     visa_scheduler.run()
+
+
