@@ -268,9 +268,6 @@ first_loop = True
 if __name__ == "__main__":
     while 1:
         LOG_FILE_NAME = "log_" + str(datetime.now().date()) + ".txt"
-        msg = "-" * 60 + f"\nRequest count: {23123}, Log time: {datetime.today()}\n"
-        send_notification("BAN", msg)
-        break
         if first_loop:
             t0 = time.time()
             total_time = 0
