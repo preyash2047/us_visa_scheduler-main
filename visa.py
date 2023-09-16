@@ -7,6 +7,7 @@ from datetime import datetime
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait as Wait
 from selenium.webdriver.common.by import By
@@ -255,11 +256,25 @@ def info_logger(file_path, log):
     with open(file_path, "a") as file:
         file.write(str(datetime.now().time()) + ":\n" + log + "\n")
 
+def initialize_driver():
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")  # Enable headless mode
+    chrome_options.add_argument("--disable-gpu")  # Disable GPU acceleration in headless mode
+    chrome_options.add_argument("--no-sandbox")  # Disable sandboxing in headless mode
+    chrome_options.add_argument("--disable-dev-shm-usage")  # Disable /dev/shm usage in headless mode
+
+    if LOCAL_USE:
+        # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+        driver_path = "C:\chromedriver.exe"
+        driver = webdriver.Chrome(service=Service(driver_path), options=chrome_options)
+        # driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
+    else:
+        driver = webdriver.Remote(command_executor=HUB_ADDRESS, options=chrome_options)
+
+    return driver
 
 if LOCAL_USE:
-    # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-    driver_path = "C:\chromedriver.exe"
-    driver = webdriver.Chrome(service=Service(driver_path))
+    driver = initialize_driver()
 else:
     driver = webdriver.Remote(command_executor=HUB_ADDRESS, options=webdriver.ChromeOptions())
 
