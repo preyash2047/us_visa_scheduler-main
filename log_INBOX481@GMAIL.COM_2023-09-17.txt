@@ -50,3 +50,17 @@ Exception occurred: HTTPConnectionPool(host='localhost', port=56907): Max retrie
 00:29:36.640917:
 Exception occurred: HTTPConnectionPool(host='localhost', port=56907): Max retries exceeded with url: /session/babe8dad40f1e0654951ad341b7597f0/cookie/_yatri_session (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000024C1FE68E80>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
 
+00:35:30.990887:
+------------------------------------------------------------
+Request count: 1, Log time: 2023-09-17 00:35:30.989875
+
+00:35:31.385527:
+List is empty, So removed en-ca-tor!
+00:35:33.864310:
+Available dates:
+
+00:35:33.864310:
+
+Working Time:  ~ 0.31 minutes
+00:35:33.864310:
+Retry Wait Time: 53 seconds

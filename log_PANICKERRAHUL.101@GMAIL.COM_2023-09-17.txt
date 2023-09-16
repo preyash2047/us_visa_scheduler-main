@@ -60,3 +60,25 @@ Available dates:
 Working Time:  ~ 2.01 minutes
 00:28:51.458519:
 Retry Wait Time: 81 seconds
+00:30:12.466298:
+------------------------------------------------------------
+Request count: 4, Log time: 2023-09-17 00:30:12.465296
+
+00:30:28.743258:
+Exception occurred: HTTPConnectionPool(host='localhost', port=56906): Max retries exceeded with url: /session/7730918dec116aba3c48cdc0c524a61b/cookie/_yatri_session (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000024C1FF1A190>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+
+00:30:28.743258:
+Exception occurred: HTTPConnectionPool(host='localhost', port=56906): Max retries exceeded with url: /session/7730918dec116aba3c48cdc0c524a61b/cookie/_yatri_session (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000024C1FF1A190>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+
+00:35:31.531120:
+------------------------------------------------------------
+Request count: 1, Log time: 2023-09-17 00:35:31.531120
+
+00:35:31.924029:
+Available dates:
+2024-08-29, 2025-04-07, 2025-10-10, 2025-10-16, 2025-10-17, 2025-10-21, 2025-10-22, 2025-10-23, 2025-10-24, 2025-10-27, 2025-10-28, 2025-10-29, 2025-10-30, 2025-10-31, 2025-11-03, 2025-11-04, 2025-11-06, 2025-11-07, 2025-11-10, 2025-11-12, 2025-11-13, 2025-11-14, 2025-11-17, 2025-11-18, 2025-11-20, 2025-11-21, 2025-11-24, 2025-11-25, 2025-11-26, 2025-11-28, 2025-12-01, 2025-12-02, 2025-12-04, 2025-12-05, 2025-12-08, 2025-12-09, 2025-12-10, 2025-12-11, 2025-12-12, 2025-12-15, 2025-12-16, 2025-12-18, 2025-12-19, 2025-12-22, 2025-12-23, 2025-12-29, 2025-12-30, 2025-12-31, 2026-01-02, 2026-01-05, 2026-01-06, 2026-01-07, 2026-01-08, 2026-01-09, 2026-01-12, 2026-01-13, 2026-01-14, 2026-01-15, 2026-01-16, 2026-01-20, 2026-01-22, 2026-01-23, 2026-01-26, 2026-01-27, 2026-01-28, 2026-01-29, 2026-01-30, 
+00:35:31.930607:
+
+Working Time:  ~ 0.28 minutes
+00:35:31.930607:
+Retry Wait Time: 74 seconds

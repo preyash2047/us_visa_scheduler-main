@@ -5,6 +5,8 @@ import requests
 import configparser
 from datetime import datetime
 import concurrent.futures
+import signal
+import os
 
 import pandas as pd  # Added pandas library for reading Excel data
 from selenium import webdriver
@@ -340,38 +342,35 @@ class VisaScheduler:
 
 # Define a function that performs the visa scheduling process for a single row
 def run_visa_scheduling(username, password, schedule_id, period_start, period_end, your_embassy, embassies):
-    # Call the function to run the visa scheduler for the current user
-    visa_scheduler = VisaScheduler(username, password, schedule_id, period_start, period_end, your_embassy, embassies)
-    visa_scheduler.run()
+    try:
+        visa_scheduler = VisaScheduler(username, password, schedule_id, period_start, period_end, your_embassy, embassies)
+        visa_scheduler.run()
+        print(f"Visa scheduling for {username} completed.")
+    except Exception as e:
+        print(f"An error occurred for {username}: {str(e)}")
 
+# Define a cleanup function to terminate all processes
+def cleanup(signum, frame):
+    print("Received Ctrl+C. Shutting down...")
+    executor.shutdown(wait=False)
+    os._exit(1)
 
-def main():
-    MAX_THREADS = 4  # Adjust this to the desired number of concurrent threads
+# Set the maximum number of threads
+MAX_THREADS = 5
 
-    # Create a ThreadPoolExecutor
-    with concurrent.futures.ThreadPoolExecutor(MAX_THREADS) as executor:
-        # Iterate over each row in the DataFrame and submit it for concurrent execution
-        futures = []
-        for index, row in df.iterrows():
-            username = row['USERNAME']
-            password = row['PASSWORD']
-            schedule_id = row['SCHEDULE_ID']
-            period_start = row['PRIOD_START'].strftime('%Y-%m-%d')
-            period_end = row['PRIOD_END'].strftime('%Y-%m-%d')
-            your_embassy = row['YOUR_EMBASSY']
-            future = executor.submit(run_visa_scheduling, username, password, schedule_id, period_start, period_end, your_embassy, Embassies)
-            futures.append(future)
+# Initialize the ThreadPoolExecutor
+with concurrent.futures.ThreadPoolExecutor(MAX_THREADS) as executor:
+    # Register the cleanup function to handle Ctrl+C
+    signal.signal(signal.SIGINT, cleanup)
 
-        # Handle Ctrl+C
-        try:
-            for future in concurrent.futures.as_completed(futures):
-                # Retrieve the result or exception of each task
-                result = future.result()
-                if result:
-                    print(result)
-        except KeyboardInterrupt:
-            print("Received Ctrl+C. Shutting down...")
-            # Cancel any pending tasks
-            for future in futures:
-                future.cancel()
-main()
+    # Iterate over each row in the DataFrame and submit it for concurrent execution
+    for index, row in df.iterrows():
+        username = row['USERNAME']
+        password = row['PASSWORD']
+        schedule_id = row['SCHEDULE_ID']
+        period_start = row['PRIOD_START'].strftime('%Y-%m-%d')
+        period_end = row['PRIOD_END'].strftime('%Y-%m-%d')
+        your_embassy = row['YOUR_EMBASSY']
+        executor.submit(run_visa_scheduling, username, password, schedule_id, period_start, period_end, your_embassy, Embassies)
+
+# This code will properly handle Ctrl+C and terminate all processes.
