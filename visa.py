@@ -210,7 +210,7 @@ def get_available_date(dates):
     # Evaluation of different available dates
     def is_in_period(date, PSD, PED):
         new_date = datetime.strptime(date, "%Y-%m-%d")
-        result = ( PED > new_date and new_date > PSD )
+        result = ( PED >= new_date and new_date >= PSD )
         # print(f'{new_date.date()} : {result}', end=", ")
         return result
     
