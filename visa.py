@@ -224,8 +224,7 @@ def get_available_date(dates):
 
 EMBASSY_COUNTER = 0
 def update_embassy():
-    global Embassies,config,YOUR_EMBASSY,EMBASSY,FACILITY_ID,REGEX_CONTINUE,SIGN_IN_LINK,APPOINTMENT_URL,DATE_URL,TIME_URL,SIGN_OUT_LINK,EMBASSY_COUNTER,first_loop
-    
+    global Embassies,config,YOUR_EMBASSY,EMBASSY,FACILITY_ID,REGEX_CONTINUE,SIGN_IN_LINK,APPOINTMENT_URL,DATE_URL,TIME_URL,SIGN_OUT_LINK,EMBASSY_COUNTER,first_loop,BAN_COOLDOWN_TIME,SIGN_OUT_LINK
     if len(list(Embassies)) == 0:
         # Ban Situation
         msg = f"Embassies List is empty, Probabely banned!\n\tSleep for {BAN_COOLDOWN_TIME} hours!\n"
@@ -234,8 +233,9 @@ def update_embassy():
         send_notification("BAN", msg)
         driver.get(SIGN_OUT_LINK)
         time.sleep(BAN_COOLDOWN_TIME * hour)
-        first_loop = True       
-    if EMBASSY_COUNTER > len(list(Embassies)):
+        first_loop = True    
+
+    if EMBASSY_COUNTER >= len(list(Embassies)):
         EMBASSY_COUNTER = 0
     YOUR_EMBASSY = list(Embassies)[EMBASSY_COUNTER]
     EMBASSY = Embassies[YOUR_EMBASSY][0]
@@ -322,15 +322,17 @@ if __name__ == "__main__":
                 print(msg)
                 info_logger(LOG_FILE_NAME, msg)
                 time.sleep(RETRY_WAIT_TIME)
-        except:
-            # Exception Occured
-            msg = f"Break the loop after exception!\n"
+        except Exception as e:
+            # Exception Occurred
+            msg = f"Exception occurred: {str(e)}\n"
             END_MSG_TITLE = "EXCEPTION"
+            print(msg)
+            info_logger(LOG_FILE_NAME, msg)
             break
 
 print(msg)
 info_logger(LOG_FILE_NAME, msg)
-send_notification("END_MSG_TITLE", msg)
+send_notification(END_MSG_TITLE, msg)
 driver.get(SIGN_OUT_LINK)
 driver.stop_client()
 driver.quit()
