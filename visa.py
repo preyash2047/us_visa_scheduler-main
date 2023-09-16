@@ -224,13 +224,24 @@ def get_available_date(dates):
 
 EMBASSY_COUNTER = 0
 def update_embassy():
-    global Embassies,config,YOUR_EMBASSY,EMBASSY,FACILITY_ID,REGEX_CONTINUE,SIGN_IN_LINK,APPOINTMENT_URL,DATE_URL,TIME_URL,SIGN_OUT_LINK,EMBASSY_COUNTER
+    global Embassies,config,YOUR_EMBASSY,EMBASSY,FACILITY_ID,REGEX_CONTINUE,SIGN_IN_LINK,APPOINTMENT_URL,DATE_URL,TIME_URL,SIGN_OUT_LINK,EMBASSY_COUNTER,first_loop
+    
+    if len(list(Embassies)) == 0:
+        # Ban Situation
+        msg = f"Embassies List is empty, Probabely banned!\n\tSleep for {BAN_COOLDOWN_TIME} hours!\n"
+        print(msg)
+        info_logger(LOG_FILE_NAME, msg)
+        send_notification("BAN", msg)
+        driver.get(SIGN_OUT_LINK)
+        time.sleep(BAN_COOLDOWN_TIME * hour)
+        first_loop = True       
     if EMBASSY_COUNTER > len(list(Embassies)):
         EMBASSY_COUNTER = 0
     YOUR_EMBASSY = list(Embassies)[EMBASSY_COUNTER]
     EMBASSY = Embassies[YOUR_EMBASSY][0]
     FACILITY_ID = Embassies[YOUR_EMBASSY][1]
-    REGEX_CONTINUE = Embassies[YOUR_EMBASSY][2] 
+    REGEX_CONTINUE = Embassies[YOUR_EMBASSY][2]
+    print("now looking for ", YOUR_EMBASSY) 
 
     SIGN_IN_LINK = f"https://ais.usvisa-info.com/{EMBASSY}/niv/users/sign_in"
     APPOINTMENT_URL = f"https://ais.usvisa-info.com/{EMBASSY}/niv/schedule/{SCHEDULE_ID}/appointment"
@@ -253,8 +264,8 @@ else:
     driver = webdriver.Remote(command_executor=HUB_ADDRESS, options=webdriver.ChromeOptions())
 
 
+first_loop = True
 if __name__ == "__main__":
-    first_loop = True
     while 1:
         LOG_FILE_NAME = "log_" + str(datetime.now().date()) + ".txt"
         if first_loop:
@@ -270,45 +281,47 @@ if __name__ == "__main__":
             info_logger(LOG_FILE_NAME, msg)
             dates = get_date()
             if not dates:
-                # Ban Situation
-                msg = f"List is empty, Probabely banned!\n\tSleep for {BAN_COOLDOWN_TIME} hours!\n"
+                # No Dats remove the state
+                del Embassies[YOUR_EMBASSY]
+                if EMBASSY_COUNTER > 0:
+                    EMBASSY_COUNTER = 1
+                else:
+                    EMBASSY_COUNTER -= 1   
+                msg = f"List is empty, So removed {YOUR_EMBASSY}!"
                 print(msg)
                 info_logger(LOG_FILE_NAME, msg)
-                send_notification("BAN", msg)
+                send_notification("EMBASSY REMOVED", msg)
+
+            # Print Available dates:
+            msg = ""
+            for d in dates:
+                msg = msg + "%s" % (d.get('date')) + ", "
+            msg = "Available dates:\n"+ msg
+            print(msg)
+            info_logger(LOG_FILE_NAME, msg)
+            date = get_available_date(dates)
+            if date:
+                # A good date to schedule for
+                END_MSG_TITLE, msg = reschedule(date)
+                break
+            update_embassy()
+            RETRY_WAIT_TIME = random.randint(RETRY_TIME_L_BOUND, RETRY_TIME_U_BOUND)
+            t1 = time.time()
+            total_time = t1 - t0
+            msg = "\nWorking Time:  ~ {:.2f} minutes".format(total_time/minute)
+            print(msg)
+            info_logger(LOG_FILE_NAME, msg)
+            if total_time > WORK_LIMIT_TIME * hour:
+                # Let program rest a little
+                send_notification("REST", f"Break-time after {WORK_LIMIT_TIME} hours | Repeated {Req_count} times")
                 driver.get(SIGN_OUT_LINK)
-                time.sleep(BAN_COOLDOWN_TIME * hour)
+                time.sleep(WORK_COOLDOWN_TIME * hour)
                 first_loop = True
             else:
-                # Print Available dates:
-                msg = ""
-                for d in dates:
-                    msg = msg + "%s" % (d.get('date')) + ", "
-                msg = "Available dates:\n"+ msg
+                msg = "Retry Wait Time: "+ str(RETRY_WAIT_TIME)+ " seconds"
                 print(msg)
                 info_logger(LOG_FILE_NAME, msg)
-                date = get_available_date(dates)
-                if date:
-                    # A good date to schedule for
-                    END_MSG_TITLE, msg = reschedule(date)
-                    break
-                # update_embassy()
-                RETRY_WAIT_TIME = random.randint(RETRY_TIME_L_BOUND, RETRY_TIME_U_BOUND)
-                t1 = time.time()
-                total_time = t1 - t0
-                msg = "\nWorking Time:  ~ {:.2f} minutes".format(total_time/minute)
-                print(msg)
-                info_logger(LOG_FILE_NAME, msg)
-                if total_time > WORK_LIMIT_TIME * hour:
-                    # Let program rest a little
-                    send_notification("REST", f"Break-time after {WORK_LIMIT_TIME} hours | Repeated {Req_count} times")
-                    driver.get(SIGN_OUT_LINK)
-                    time.sleep(WORK_COOLDOWN_TIME * hour)
-                    first_loop = True
-                else:
-                    msg = "Retry Wait Time: "+ str(RETRY_WAIT_TIME)+ " seconds"
-                    print(msg)
-                    info_logger(LOG_FILE_NAME, msg)
-                    time.sleep(RETRY_WAIT_TIME)
+                time.sleep(RETRY_WAIT_TIME)
         except:
             # Exception Occured
             msg = f"Break the loop after exception!\n"
