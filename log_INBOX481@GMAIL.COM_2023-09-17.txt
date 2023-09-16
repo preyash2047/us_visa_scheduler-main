@@ -12,3 +12,41 @@ Available dates:
 Working Time:  ~ 0.19 minutes
 00:08:08.960920:
 Retry Wait Time: 44 seconds
+00:26:59.242675:
+------------------------------------------------------------
+Request count: 1, Log time: 2023-09-17 00:26:59.241675
+
+00:26:59.573885:
+List is empty, So removed en-ca-tor!
+00:27:01.535927:
+Available dates:
+
+00:27:01.538950:
+
+Working Time:  ~ 0.18 minutes
+00:27:01.539952:
+Retry Wait Time: 117 seconds
+00:28:58.543845:
+------------------------------------------------------------
+Request count: 2, Log time: 2023-09-17 00:28:58.541990
+
+00:28:59.451890:
+List is empty, So removed en-ca-van!
+00:29:01.372479:
+Available dates:
+
+00:29:01.372479:
+
+Working Time:  ~ 2.18 minutes
+00:29:01.372479:
+Retry Wait Time: 19 seconds
+00:29:20.389701:
+------------------------------------------------------------
+Request count: 3, Log time: 2023-09-17 00:29:20.388002
+
+00:29:36.640917:
+Exception occurred: HTTPConnectionPool(host='localhost', port=56907): Max retries exceeded with url: /session/babe8dad40f1e0654951ad341b7597f0/cookie/_yatri_session (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000024C1FE68E80>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+
+00:29:36.640917:
+Exception occurred: HTTPConnectionPool(host='localhost', port=56907): Max retries exceeded with url: /session/babe8dad40f1e0654951ad341b7597f0/cookie/_yatri_session (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000024C1FE68E80>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+

@@ -344,14 +344,34 @@ def run_visa_scheduling(username, password, schedule_id, period_start, period_en
     visa_scheduler = VisaScheduler(username, password, schedule_id, period_start, period_end, your_embassy, embassies)
     visa_scheduler.run()
 
-with concurrent.futures.ThreadPoolExecutor(MAX_THREADS) as executor:
-    # Iterate over each row in the DataFrame and submit it for concurrent execution
-    for index, row in df.iterrows():
-        username = row['USERNAME']
-        password = row['PASSWORD']
-        schedule_id = row['SCHEDULE_ID']
-        period_start = row['PRIOD_START'].strftime('%Y-%m-%d')
-        period_end = row['PRIOD_END'].strftime('%Y-%m-%d')
-        your_embassy = row['YOUR_EMBASSY']
-        executor.submit(run_visa_scheduling, username, password, schedule_id, period_start, period_end, your_embassy, Embassies)
 
+def main():
+    MAX_THREADS = 4  # Adjust this to the desired number of concurrent threads
+
+    # Create a ThreadPoolExecutor
+    with concurrent.futures.ThreadPoolExecutor(MAX_THREADS) as executor:
+        # Iterate over each row in the DataFrame and submit it for concurrent execution
+        futures = []
+        for index, row in df.iterrows():
+            username = row['USERNAME']
+            password = row['PASSWORD']
+            schedule_id = row['SCHEDULE_ID']
+            period_start = row['PRIOD_START'].strftime('%Y-%m-%d')
+            period_end = row['PRIOD_END'].strftime('%Y-%m-%d')
+            your_embassy = row['YOUR_EMBASSY']
+            future = executor.submit(run_visa_scheduling, username, password, schedule_id, period_start, period_end, your_embassy, Embassies)
+            futures.append(future)
+
+        # Handle Ctrl+C
+        try:
+            for future in concurrent.futures.as_completed(futures):
+                # Retrieve the result or exception of each task
+                result = future.result()
+                if result:
+                    print(result)
+        except KeyboardInterrupt:
+            print("Received Ctrl+C. Shutting down...")
+            # Cancel any pending tasks
+            for future in futures:
+                future.cancel()
+main()
