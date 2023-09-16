@@ -1,0 +1,14 @@
+00:08:06.705790:
+------------------------------------------------------------
+Request count: 1, Log time: 2023-09-17 00:08:06.704796
+
+00:08:07.042079:
+List is empty, So removed en-ca-tor!
+00:08:08.958924:
+Available dates:
+
+00:08:08.960920:
+
+Working Time:  ~ 0.19 minutes
+00:08:08.960920:
+Retry Wait Time: 44 seconds
