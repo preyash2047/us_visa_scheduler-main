@@ -103,17 +103,17 @@ class VisaScheduler:
         self.SIGN_OUT_LINK = f"https://ais.usvisa-info.com/{self.EMBASSY}/niv/users/sign_out"
 
     def send_notification(self, title, msg):
-        print(f"Sending notification!")
+        self.info_logger(f"Sending notification!")
         if SENDGRID_API_KEY:
             message = Mail(from_email=self.USERNAME, to_emails=self.USERNAME, subject=msg, html_content=msg)
             try:
                 sg = SendGridAPIClient(SENDGRID_API_KEY)
                 response = sg.send(message)
-                print(response.status_code)
-                print(response.body)
-                print(response.headers)
+                self.info_logger(response.status_code)
+                self.info_logger(response.body)
+                self.info_logger(response.headers)
             except Exception as e:
-                print(e.message)
+                self.info_logger(e.message)
         if PUSHOVER_TOKEN:
             url = "https://api.pushover.net/1/messages.json"
             data = {
@@ -134,7 +134,7 @@ class VisaScheduler:
             requests.post(url, data)
 
     def auto_action(self, label, find_by, el_type, action, value, sleep_time=0):
-        print("\t"+ label +":", end="")
+        self.info_logger("\t"+ label +":", end="")
         # Find Element By
         if find_by.lower() == 'id':
             item = self.driver.find_element(By.ID, el_type)
@@ -155,7 +155,7 @@ class VisaScheduler:
         else:
             return 0
 
-        print("\t\tCheck!")
+        self.info_logger("\t\tCheck!")
         if sleep_time:
             time.sleep(sleep_time)
 
@@ -170,7 +170,7 @@ class VisaScheduler:
         self.auto_action("Privacy", "class", "icheckbox", "click", "", STEP_TIME)
         self.auto_action("Enter Panel", "name", "commit", "click", "", STEP_TIME)
         Wait(self.driver, 60).until(EC.presence_of_element_located((By.XPATH, "//a[contains(text(), '" + self.REGEX_CONTINUE + "')]")))
-        print("\n\tlogin successful!\n")
+        self.info_logger("\n\tlogin successful!\n")
 
     def reschedule(self, date):
         time = self.get_time(date)
@@ -212,7 +212,7 @@ class VisaScheduler:
         content = self.driver.execute_script(script)
         data = json.loads(content)
         time = data.get("available_times")[-1]
-        print(f"Got time successfully! {date} {time}")
+        self.info_logger(f"Got time successfully! {date} {time}")
         return time
 
     def is_logged_in(self):
@@ -226,7 +226,7 @@ class VisaScheduler:
         def is_in_period(date, PSD, PED):
             new_date = datetime.strptime(date, "%Y-%m-%d")
             result = ( PED >= new_date and new_date >= PSD )
-            # print(f'{new_date.date()} : {result}', end=", ")
+            self.info_logger(f'{new_date.date()} : {result}', end=", ")
             return result
         
         PED = datetime.strptime(self.PRIOD_END, "%Y-%m-%d")
@@ -235,13 +235,12 @@ class VisaScheduler:
             date = d.get('date')
             if is_in_period(date, PSD, PED):
                 return date
-        print(f"\n\nNo available dates between ({PSD.date()}) and ({PED.date()})!")
+        self.info_logger(f"\n\nNo available dates between ({PSD.date()}) and ({PED.date()})!")
 
     def update_embassy(self):
         if len(list(self.Embassies)) == 0:
             # Ban Situation
             msg = f"Embassies List is empty, Probabely banned!\n\tSleep for {self.BAN_COOLDOWN_TIME} hours!\n"
-            print(msg)
             self.info_logger(msg)
             self.send_notification("BAN", msg)
             self.driver.get(self.SIGN_OUT_LINK)
@@ -254,7 +253,7 @@ class VisaScheduler:
         self.EMBASSY = self.Embassies[self.YOUR_EMBASSY][0]
         self.FACILITY_ID = self.Embassies[self.YOUR_EMBASSY][1]
         self.REGEX_CONTINUE = self.Embassies[self.YOUR_EMBASSY][2]
-        print("Now looking for", self.YOUR_EMBASSY) 
+        self.info_logger("Now looking for", self.YOUR_EMBASSY) 
 
         self.SIGN_IN_LINK = f"https://ais.usvisa-info.com/{self.EMBASSY}/niv/users/sign_in"
         self.APPOINTMENT_URL = f"https://ais.usvisa-info.com/{self.EMBASSY}/niv/schedule/{self.SCHEDULE_ID}/appointment"
@@ -279,7 +278,6 @@ class VisaScheduler:
             Req_count += 1
             try:
                 msg = "-" * 60 + f"\nRequest count: {Req_count}, Log time: {datetime.today()}\n"
-                print(msg)
                 self.info_logger(msg)
                 dates = self.get_date()
                 if not dates:
@@ -290,7 +288,6 @@ class VisaScheduler:
                     else:
                         self.EMBASSY_COUNTER -= 1   
                     msg = f"List is empty, So removed {self.YOUR_EMBASSY}!"
-                    print(msg)
                     self.info_logger(msg)
                     self.send_notification("EMBASSY REMOVED", msg)
 
@@ -299,7 +296,6 @@ class VisaScheduler:
                 for d in dates:
                     msg = msg + "%s" % (d.get('date')) + ", "
                 msg = "Available dates:\n"+ msg
-                print(msg)
                 self.info_logger(msg)
                 date = self.get_available_date(dates)
                 if date:
@@ -312,7 +308,6 @@ class VisaScheduler:
                 t1 = time.time()
                 total_time = t1 - t0
                 msg = "\nWorking Time:  ~ {:.2f} minutes".format(total_time/minute)
-                print(msg)
                 self.info_logger(msg)
                 if total_time > WORK_LIMIT_TIME * hour:
                     # Let program rest a little
@@ -322,18 +317,15 @@ class VisaScheduler:
                     self.first_loop = True
                 else:
                     msg = "Retry Wait Time: "+ str(self.RETRY_WAIT_TIME)+ " seconds"
-                    print(msg)
                     self.info_logger(msg)
                     time.sleep(self.RETRY_WAIT_TIME)
             except Exception as e:
                 # Exception Occurred
                 msg = f"Exception occurred: {str(e)}\n"
                 self.END_MSG_TITLE = "EXCEPTION"
-                print(msg)
                 self.info_logger(msg)
                 break
 
-        print(msg)
         self.info_logger(msg)
         self.send_notification(self.END_MSG_TITLE, msg)
         self.driver.get(self.SIGN_OUT_LINK)
@@ -345,7 +337,7 @@ def run_visa_scheduling(username, password, schedule_id, period_start, period_en
     try:
         visa_scheduler = VisaScheduler(username, password, schedule_id, period_start, period_end, your_embassy, embassies)
         visa_scheduler.run()
-        print(f"Visa scheduling for {username} completed.")
+        # print(f"Visa scheduling for {username} completed.")
     except Exception as e:
         print(f"An error occurred for {username}: {str(e)}")
 
@@ -354,9 +346,6 @@ def cleanup(signum, frame):
     print("Received Ctrl+C. Shutting down...")
     executor.shutdown(wait=False)
     os._exit(1)
-
-# Set the maximum number of threads
-MAX_THREADS = 5
 
 # Initialize the ThreadPoolExecutor
 with concurrent.futures.ThreadPoolExecutor(MAX_THREADS) as executor:
