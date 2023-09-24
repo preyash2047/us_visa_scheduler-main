@@ -4,9 +4,12 @@ import random
 import requests
 import configparser
 from datetime import datetime
+import os
+import tkinter as tk
+from tkinter import ttk
+from tkinter import messagebox
 import concurrent.futures
 import signal
-import os
 
 import pandas as pd  # Added pandas library for reading Excel data
 from selenium import webdriver
@@ -346,13 +349,6 @@ def cleanup(signum, frame):
     print("Received Ctrl+C. Shutting down...")
     executor.shutdown(wait=False)
     os._exit(1)
-
-import tkinter as tk
-from tkinter import ttk
-from tkinter import messagebox
-import concurrent.futures
-import signal
-import os
 
 # Function to run the script
 def start_script():
