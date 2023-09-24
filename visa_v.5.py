@@ -388,28 +388,58 @@ def cleanup(signum, frame):
     executor.shutdown(wait=False)
     os._exit(1)
 
+
 # Create a Tkinter window
 root = tk.Tk()
 root.title("Visa Scheduler")
-root.geometry("400x200")
+root.geometry("500x200")
 
 # Create and configure GUI elements
 frame = ttk.Frame(root)
 frame.pack(padx=20, pady=20)
 
-label = ttk.Label(frame, text="Click the Start button to run the script.")
-label.pack()
+# Define the allowed date (15th October 2023)
+allowed_date = datetime(2023, 10, 15)
 
+# Check the current date
+current_date = datetime.now()
+
+# Function to hide the "Click here to start" label
+def hide_start_label():
+    start_label.pack_forget()
+
+# Create a label widget to display the message
+message_label = ttk.Label(frame, text="")
+message_label.pack()
+# Function to update the message label and button states
+def update_message_and_buttons():
+    if current_date > allowed_date:
+        message_label.config(text="This application is no longer available for use after " + allowed_date.strftime("%dth %B %Y") + ".")
+        # Hide the "Start" and "Stop" buttons when the date has passed
+        start_button.pack_forget()
+        stop_button.pack_forget()
+        # Hide the "Click here to start" label as well
+        hide_start_label()
+    else:
+        message_label.config(text="Click the Start button to run the script.")
+        # Show the buttons if the date is not reached
+        start_button.pack()
+        stop_button.pack()
+        # Show the "Click here to start" label
+        start_label.pack()
+
+# Create and configure GUI elements
+start_label = ttk.Label(frame, text="Click here to start")
 start_button = ttk.Button(frame, text="Start", command=start_script)
-start_button.pack()
-
 stop_button = ttk.Button(frame, text="Stop", command=stop_script)
-stop_button.pack()
 
 # Initialize the ThreadPoolExecutor
 with concurrent.futures.ThreadPoolExecutor(1) as executor:
     # Register the cleanup function to handle Ctrl+C
     signal.signal(signal.SIGINT, cleanup)
+
+    # Update the message label and buttons initially
+    update_message_and_buttons()
 
     # Start the Tkinter main loop
     root.mainloop()
