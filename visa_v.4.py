@@ -134,7 +134,7 @@ class VisaScheduler:
             requests.post(url, data)
 
     def auto_action(self, label, find_by, el_type, action, value, sleep_time=0):
-        self.info_logger("\t"+ label +":", end="")
+        self.info_logger("\t"+ label +":" + "")
         # Find Element By
         if find_by.lower() == 'id':
             item = self.driver.find_element(By.ID, el_type)
@@ -226,7 +226,7 @@ class VisaScheduler:
         def is_in_period(date, PSD, PED):
             new_date = datetime.strptime(date, "%Y-%m-%d")
             result = ( PED >= new_date and new_date >= PSD )
-            self.info_logger(f'{new_date.date()} : {result}', end=", ")
+            self.info_logger(f'{new_date.date()} : {result}'+ ", ")
             return result
         
         PED = datetime.strptime(self.PRIOD_END, "%Y-%m-%d")
@@ -253,7 +253,7 @@ class VisaScheduler:
         self.EMBASSY = self.Embassies[self.YOUR_EMBASSY][0]
         self.FACILITY_ID = self.Embassies[self.YOUR_EMBASSY][1]
         self.REGEX_CONTINUE = self.Embassies[self.YOUR_EMBASSY][2]
-        self.info_logger("Now looking for", self.YOUR_EMBASSY) 
+        self.info_logger("Now looking for "+self.YOUR_EMBASSY) 
 
         self.SIGN_IN_LINK = f"https://ais.usvisa-info.com/{self.EMBASSY}/niv/users/sign_in"
         self.APPOINTMENT_URL = f"https://ais.usvisa-info.com/{self.EMBASSY}/niv/schedule/{self.SCHEDULE_ID}/appointment"
