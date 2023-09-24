@@ -162,3 +162,67 @@ Now looking for en-ca-cal
 Working Time:  ~ 0.19 minutes
 15:30:33.337174:
 Retry Wait Time: 66 seconds
+15:31:39.341431:
+------------------------------------------------------------
+Request count: 2, Log time: 2023-09-24 15:31:39.341432
+
+15:31:40.226548:
+List is empty, So removed en-ca-cal!
+15:31:40.226548:
+Sending notification!
+15:31:41.835802:
+Available dates:
+
+15:31:41.850820:
+
+
+No available dates between (2023-09-30) and (2023-09-30)!
+15:31:41.850820:
+Now looking for en-ca-ott
+15:31:41.852686:
+
+Working Time:  ~ 1.33 minutes
+15:31:41.853589:
+Retry Wait Time: 40 seconds
+15:32:21.869894:
+------------------------------------------------------------
+Request count: 3, Log time: 2023-09-24 15:32:21.869895
+
+15:32:22.358627:
+Available dates:
+2025-07-24, 
+15:32:22.358627:
+2025-07-24 : False, 
+15:32:22.366620:
+
+
+No available dates between (2023-09-30) and (2023-09-30)!
+15:32:22.368111:
+Now looking for en-ca-que
+15:32:22.368111:
+
+Working Time:  ~ 2.01 minutes
+15:32:22.368111:
+Retry Wait Time: 51 seconds
+15:33:13.371821:
+------------------------------------------------------------
+Request count: 4, Log time: 2023-09-24 15:33:13.371821
+
+15:33:13.937505:
+List is empty, So removed en-ca-que!
+15:33:13.937505:
+Sending notification!
+15:33:16.168018:
+Available dates:
+
+15:33:16.168018:
+
+
+No available dates between (2023-09-30) and (2023-09-30)!
+15:33:16.168018:
+Now looking for en-ca-ott
+15:33:16.168018:
+
+Working Time:  ~ 2.90 minutes
+15:33:16.168018:
+Retry Wait Time: 112 seconds

@@ -44,3 +44,37 @@ Now looking for en-ca-van
 Working Time:  ~ 0.24 minutes
 15:30:36.649473:
 Retry Wait Time: 59 seconds
+15:31:35.661355:
+------------------------------------------------------------
+Request count: 2, Log time: 2023-09-24 15:31:35.661355
+
+15:31:35.961052:
+List is empty, So removed en-ca-van!
+15:31:35.961052:
+Sending notification!
+15:31:36.883527:
+Available dates:
+
+15:31:36.892884:
+
+
+No available dates between (2023-09-30) and (2023-09-30)!
+15:31:36.892884:
+Now looking for en-ca-que
+15:31:36.892884:
+
+Working Time:  ~ 1.25 minutes
+15:31:36.892884:
+Retry Wait Time: 120 seconds
+15:33:36.903567:
+------------------------------------------------------------
+Request count: 3, Log time: 2023-09-24 15:33:36.902691
+
+15:33:38.088426:
+Exception occurred: 'en-ca-que'
+
+15:33:38.088426:
+Exception occurred: 'en-ca-que'
+
+15:33:38.088426:
+Sending notification!

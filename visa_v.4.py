@@ -119,7 +119,7 @@ class VisaScheduler:
             data = {
                 "token": PUSHOVER_TOKEN,
                 "user": PUSHOVER_USER,
-                "message": msg
+                "message": f"#{self.USERNAME}\n{msg}"
             }
             requests.post(url, data)
         if PERSONAL_SITE_USER:
