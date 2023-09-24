@@ -429,7 +429,7 @@ def update_message_and_buttons():
         start_label.pack()
 
 # Create and configure GUI elements
-start_label = ttk.Label(frame, text="Click here to start")
+start_label = ttk.Label(frame, text="")
 start_button = ttk.Button(frame, text="Start", command=start_script)
 stop_button = ttk.Button(frame, text="Stop", command=stop_script)
 
