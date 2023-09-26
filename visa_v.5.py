@@ -243,11 +243,11 @@ class VisaScheduler:
     def update_embassy(self):
         if len(list(self.Embassies)) == 0:
             # Ban Situation
-            msg = f"Embassies List is empty, Probabely banned!\n\tSleep for {self.BAN_COOLDOWN_TIME} hours!\n"
+            msg = f"Embassies List is empty, Probabely banned!\n\tSleep for {BAN_COOLDOWN_TIME} hours!\n"
             self.info_logger(msg)
             self.send_notification("BAN", msg)
             self.driver.get(self.SIGN_OUT_LINK)
-            time.sleep(self.BAN_COOLDOWN_TIME * hour)
+            time.sleep(BAN_COOLDOWN_TIME * hour)
             self.first_loop = True    
 
         if self.EMBASSY_COUNTER >= len(list(self.Embassies)):
