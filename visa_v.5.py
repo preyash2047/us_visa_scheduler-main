@@ -93,6 +93,7 @@ class VisaScheduler:
         self.PRIOD_START = PRIOD_START
         self.PRIOD_END = PRIOD_END
         self.YOUR_EMBASSY = YOUR_EMBASSY
+        self.AllEmbassies = Embassies
         self.Embassies = Embassies
         
         self.EMBASSY = self.Embassies[self.YOUR_EMBASSY][0]
@@ -242,13 +243,14 @@ class VisaScheduler:
 
     def update_embassy(self):
         if len(list(self.Embassies)) == 0:
-            # Ban Situation
-            msg = f"Embassies List is empty, Probabely banned!\n\tSleep for {BAN_COOLDOWN_TIME} hours!\n"
-            self.info_logger(msg)
-            self.send_notification("BAN", msg)
-            self.driver.get(self.SIGN_OUT_LINK)
-            time.sleep(BAN_COOLDOWN_TIME * hour)
-            self.first_loop = True    
+            self.Embassies = self.AllEmbassies.copy()
+            # # Ban Situation
+            # msg = f"Embassies List is empty, Probabely banned!\n\tSleep for {BAN_COOLDOWN_TIME} hours!\n"
+            # self.info_logger(msg)
+            # self.send_notification("BAN", msg)
+            # self.driver.get(self.SIGN_OUT_LINK)
+            # time.sleep(BAN_COOLDOWN_TIME * hour)
+            # self.first_loop = True    
 
         if self.EMBASSY_COUNTER >= len(list(self.Embassies)):
             self.EMBASSY_COUNTER = 0
