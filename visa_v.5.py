@@ -93,7 +93,7 @@ class VisaScheduler:
         self.PRIOD_START = PRIOD_START
         self.PRIOD_END = PRIOD_END
         self.YOUR_EMBASSY = YOUR_EMBASSY
-        self.AllEmbassies = Embassies
+        self.AllEmbassies = Embassies.copy()
         self.Embassies = Embassies
         
         self.EMBASSY = self.Embassies[self.YOUR_EMBASSY][0]
@@ -242,8 +242,10 @@ class VisaScheduler:
         self.info_logger(f"\n\nNo available dates between ({PSD.date()}) and ({PED.date()})!")
 
     def update_embassy(self):
+        print("outside self.Embassies", len(self.Embassies))
         if len(list(self.Embassies)) == 0:
             self.Embassies = self.AllEmbassies.copy()
+            print("inside self.Embassies", len(self.Embassies))
             # # Ban Situation
             # msg = f"Embassies List is empty, Probabely banned!\n\tSleep for {BAN_COOLDOWN_TIME} hours!\n"
             # self.info_logger(msg)
