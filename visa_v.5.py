@@ -96,6 +96,9 @@ class VisaScheduler:
         self.AllEmbassies = Embassies.copy()
         self.Embassies = Embassies
         
+        if not self.YOUR_EMBASSY in self.Embassies.keys():
+            self.YOUR_EMBASSY = list(self.Embassies)[0]
+
         self.EMBASSY = self.Embassies[self.YOUR_EMBASSY][0]
         self.FACILITY_ID = self.Embassies[self.YOUR_EMBASSY][1]
         self.REGEX_CONTINUE = self.Embassies[self.YOUR_EMBASSY][2]
