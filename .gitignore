@@ -47,5 +47,8 @@ Pipfile.lock
 # Ignore virtualenv folder
 venv/
 
-logs/
 old_files/
+
+logs/
+
+*.txt
