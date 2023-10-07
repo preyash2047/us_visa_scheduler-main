@@ -1,0 +1,46 @@
+22:42:06.038405:
+	Click bounce:
+22:42:06.084439:
+		Check!
+22:42:06.593805:
+	Email:
+22:42:06.666864:
+		Check!
+22:42:07.168597:
+	Password:
+22:42:07.231750:
+		Check!
+22:42:07.744496:
+	Privacy:
+22:42:07.798866:
+		Check!
+22:42:08.302193:
+	Enter Panel:
+22:42:08.359204:
+		Check!
+22:42:10.196282:
+
+	login successful!
+
+22:42:10.197368:
+------------------------------------------------------------
+Request count: 1, Log time: 2023-10-01 22:42:10.196282
+
+22:42:10.525945:
+List is empty, So removed en-ca-tor!
+22:42:10.525945:
+Sending notification!
+22:42:12.533740:
+Available dates:
+
+22:42:12.533740:
+
+
+No available dates between (2023-09-26) and (2023-11-30)!
+22:42:12.533740:
+Now looking for en-ca-van
+22:42:12.533740:
+
+Working Time:  ~ 0.20 minutes
+22:42:12.533740:
+Retry Wait Time: 46 seconds
