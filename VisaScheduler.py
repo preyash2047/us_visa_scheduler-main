@@ -61,13 +61,13 @@ def initialize_driver():
     chrome_options.add_argument("--disable-dev-shm-usage")  # Disable /dev/shm usage in headless mode
     chrome_options.add_argument(f"--version={CHROME_VERSION}")
     if LOCAL_USE:
-        # driver_path = "C:\chromedriver.exe"
-        # driver = webdriver.Chrome(service=Service(driver_path), options=chrome_options)
+        driver_path = "C:\chromedriver.exe"
+        driver = webdriver.Chrome(service=Service(driver_path), options=chrome_options)
         # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
         # driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
         # chrome_driver_path = ChromeDriverManager(chrome_type='google').install()
         # Use the chrome_driver_path when creating your Selenium WebDriver instance
-        driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
+        # driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
     else:
         driver = webdriver.Remote(command_executor=HUB_ADDRESS, options=chrome_options)
     return driver
@@ -273,71 +273,69 @@ class VisaScheduler:
             file.write(str(datetime.now().time()) + ":\n" + log + "\n")
 
     def run(self):
-        while True:
-            self.first_loop = True
-            try:
-                while 1:
-                    if self.first_loop:
-                        t0 = time.time()
-                        total_time = 0
-                        Req_count = 0
-                        self.start_process()
-                        self.first_loop = False
-                    Req_count += 1
-                    try:
-                        msg = "-" * 60 + f"\nRequest count: {Req_count}, Log time: {datetime.today()}\n"
-                        self.info_logger(msg)
-                        dates = self.get_date()
-                        if not dates:
-                            # No Dats remove the state
-                            del self.Embassies[self.YOUR_EMBASSY]
-                            if self.EMBASSY_COUNTER > 0:
-                                self.EMBASSY_COUNTER = 1
-                            else:
-                                self.EMBASSY_COUNTER -= 1   
-                            msg = f"List is empty, So removed {self.YOUR_EMBASSY}!"
-                            self.info_logger(msg)
-                            self.send_notification("EMBASSY REMOVED", msg)
-
-                        # Print Available dates:
-                        msg = ""
-                        for d in dates:
-                            msg = msg + "%s" % (d.get('date')) + ", "
-                        msg = "Available dates:\n"+ msg
-                        self.info_logger(msg)
-                        date = self.get_available_date(dates)
-                        if date:
-                            # A good date to schedule for
-                            END_MSG_TITLE, msg = self.reschedule(date)
-                            self.END_MSG_TITLE = END_MSG_TITLE
-                            break
-                        self.update_embassy()
-                        self.RETRY_WAIT_TIME = random.randint(RETRY_TIME_L_BOUND, RETRY_TIME_U_BOUND)
-                        t1 = time.time()
-                        total_time = t1 - t0
-                        msg = "\nWorking Time:  ~ {:.2f} minutes".format(total_time/minute)
-                        self.info_logger(msg)
-                        if total_time > WORK_LIMIT_TIME * hour:
-                            # Let program rest a little
-                            self.send_notification("REST", f"Break-time after {WORK_LIMIT_TIME} hours | Repeated {Req_count} times")
-                            self.driver.get(self.SIGN_OUT_LINK)
-                            time.sleep(WORK_COOLDOWN_TIME * hour)
-                            self.first_loop = True
+        try:
+            while 1:
+                if self.first_loop:
+                    t0 = time.time()
+                    total_time = 0
+                    Req_count = 0
+                    self.start_process()
+                    self.first_loop = False
+                Req_count += 1
+                try:
+                    msg = "-" * 60 + f"\nRequest count: {Req_count}, Log time: {datetime.today()}\n"
+                    self.info_logger(msg)
+                    dates = self.get_date()
+                    if not dates:
+                        # No Dats remove the state
+                        del self.Embassies[self.YOUR_EMBASSY]
+                        if self.EMBASSY_COUNTER > 0:
+                            self.EMBASSY_COUNTER = 1
                         else:
-                            msg = "Retry Wait Time: "+ str(self.RETRY_WAIT_TIME)+ " seconds"
-                            self.info_logger(msg)
-                            time.sleep(self.RETRY_WAIT_TIME)
-                    except Exception as e:
-                        # Exception Occurred
-                        msg = f"Exception occurred: {str(e)}\n"
-                        self.END_MSG_TITLE = "EXCEPTION"
+                            self.EMBASSY_COUNTER -= 1   
+                        msg = f"List is empty, So removed {self.YOUR_EMBASSY}!"
                         self.info_logger(msg)
-                        break
+                        self.send_notification("EMBASSY REMOVED", msg)
 
-                self.info_logger(msg)
-                self.send_notification(self.END_MSG_TITLE, msg)
-                self.driver.get(self.SIGN_OUT_LINK)
-                self.driver.stop_client()
-                self.driver.quit()
-            except Exception as e:
-                print(f"An error occurred for {str(e)}")
+                    # Print Available dates:
+                    msg = ""
+                    for d in dates:
+                        msg = msg + "%s" % (d.get('date')) + ", "
+                    msg = "Available dates:\n"+ msg
+                    self.info_logger(msg)
+                    date = self.get_available_date(dates)
+                    if date:
+                        # A good date to schedule for
+                        END_MSG_TITLE, msg = self.reschedule(date)
+                        self.END_MSG_TITLE = END_MSG_TITLE
+                        break
+                    self.update_embassy()
+                    self.RETRY_WAIT_TIME = random.randint(RETRY_TIME_L_BOUND, RETRY_TIME_U_BOUND)
+                    t1 = time.time()
+                    total_time = t1 - t0
+                    msg = "\nWorking Time:  ~ {:.2f} minutes".format(total_time/minute)
+                    self.info_logger(msg)
+                    if total_time > WORK_LIMIT_TIME * hour:
+                        # Let program rest a little
+                        self.send_notification("REST", f"Break-time after {WORK_LIMIT_TIME} hours | Repeated {Req_count} times")
+                        self.driver.get(self.SIGN_OUT_LINK)
+                        time.sleep(WORK_COOLDOWN_TIME * hour)
+                        self.first_loop = True
+                    else:
+                        msg = "Retry Wait Time: "+ str(self.RETRY_WAIT_TIME)+ " seconds"
+                        self.info_logger(msg)
+                        time.sleep(self.RETRY_WAIT_TIME)
+                except Exception as e:
+                    # Exception Occurred
+                    msg = f"Exception occurred: {str(e)}\n"
+                    self.END_MSG_TITLE = "EXCEPTION"
+                    self.info_logger(msg)
+                    break
+
+            self.info_logger(msg)
+            self.send_notification(self.END_MSG_TITLE, msg)
+            self.driver.get(self.SIGN_OUT_LINK)
+            self.driver.stop_client()
+            self.driver.quit()
+        except Exception as e:
+            print(f"An error occurred for {str(e)}")

@@ -7,6 +7,7 @@ from tkinter import messagebox
 import concurrent.futures
 import signal
 import pandas as pd
+import time 
 
 from embassy import Embassies
 from VisaScheduler import VisaScheduler
@@ -23,12 +24,14 @@ MAX_THREADS = config['RUNTIME'].getfloat('MAX_THREADS')
 
 # Define a function that performs the visa scheduling process for a single row
 def run_visa_scheduling(username, password, schedule_id, period_start, period_end, your_embassy, embassies):
-    try:
-        visa_scheduler = VisaScheduler(username, password, schedule_id, period_start, period_end, your_embassy, embassies)
-        visa_scheduler.run()
-        # print(f"Visa scheduling for {username} completed.")
-    except Exception as e:
-        print(f"An error occurred for {username}: {str(e)}")
+    while 1:
+        try:
+            visa_scheduler = VisaScheduler(username, password, schedule_id, period_start, period_end, your_embassy, embassies)
+            visa_scheduler.run()
+            print(f"Visa scheduling for {username} completed.")
+        except Exception as e:
+            print(f"An error occurred for {username}: {str(e)}")
+        time.sleep(5)
 
 # Define a cleanup function to terminate all processes
 def cleanup(signum, frame):
