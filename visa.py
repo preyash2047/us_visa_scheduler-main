@@ -59,6 +59,7 @@ def start_script():
         messagebox.showinfo("Script Complete", "The script has completed successfully.")
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred: {str(e)}")
+        
 # Function to stop the script
 def stop_script():
     global terminate_script
