@@ -54,7 +54,7 @@ def start_script():
                 schedule_id = row['SCHEDULE_ID']
                 period_start = row['PRIOD_START'].strftime('%Y-%m-%d')
                 period_end = row['PRIOD_END'].strftime('%Y-%m-%d')
-                your_embassy = row['YOUR_EMBASSY']
+                your_embassy = row['PREFERRED_EMBASSY']
                 executor.submit(run_visa_scheduling, username, password, schedule_id, period_start, period_end, your_embassy, Embassies)
 
         # This code will properly handle Ctrl+C and terminate all processes.

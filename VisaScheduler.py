@@ -90,9 +90,22 @@ class VisaScheduler:
         self.PRIOD_START = PRIOD_START
         self.PRIOD_END = PRIOD_END
         self.YOUR_EMBASSY = YOUR_EMBASSY
-        self.AllEmbassies = Embassies.copy()
-        self.Embassies = Embassies
-        
+        print("self.YOUR_EMBASSY", self.YOUR_EMBASSY)
+        if not self.YOUR_EMBASSY:
+            self.Embassies = Embassies.copy()
+            self.AllEmbassies = Embassies.copy()
+        else:
+            embassies = self.YOUR_EMBASSY.split(",")
+            preferred_embassies = {}
+            for e in embassies:
+                if Embassies[e]:
+                    preferred_embassies[e] = Embassies[e]
+                    self.YOUR_EMBASSY = e
+            self.Embassies = preferred_embassies.copy()
+            self.AllEmbassies = preferred_embassies.copy()
+        print("self.YOUR_EMBASSY", self.YOUR_EMBASSY)
+        print("self.Embassies", self.Embassies)
+                
         if not self.YOUR_EMBASSY in self.Embassies.keys():
             self.YOUR_EMBASSY = list(self.Embassies)[0]
 
@@ -243,7 +256,9 @@ class VisaScheduler:
 
     def update_embassy(self):
         if len(list(self.Embassies)) == 0:
+            print("self.Embassies", self.Embassies)
             self.Embassies = self.AllEmbassies.copy()
+            print("self.Embassies", self.Embassies)
             # # Ban Situation
             # msg = f"Embassies List is empty, Probabely banned!\n\tSleep for {BAN_COOLDOWN_TIME} hours!\n"
             # self.info_logger(msg)
