@@ -74,58 +74,59 @@ def cleanup(signum, frame):
     executor.shutdown(wait=False)
     os._exit(1)
 
+start_script()
 
-# Create a Tkinter window
-root = tk.Tk()
-root.title("Visa Scheduler")
-root.geometry("500x200")
+# # Create a Tkinter window
+# root = tk.Tk()
+# root.title("Visa Scheduler")
+# root.geometry("500x200")
 
-# Create and configure GUI elements
-frame = ttk.Frame(root)
-frame.pack(padx=20, pady=20)
+# # Create and configure GUI elements
+# frame = ttk.Frame(root)
+# frame.pack(padx=20, pady=20)
 
-# Define the allowed date (15th October 2023)
-allowed_date = datetime(2999, 11, 15)
+# # Define the allowed date (15th October 2023)
+# allowed_date = datetime(2999, 11, 15)
 
-# Check the current date
-current_date = datetime.now()
+# # Check the current date
+# current_date = datetime.now()
 
-# Function to hide the "Click here to start" label
-def hide_start_label():
-    start_label.pack_forget()
+# # Function to hide the "Click here to start" label
+# def hide_start_label():
+#     start_label.pack_forget()
 
-# Create a label widget to display the message
-message_label = ttk.Label(frame, text="")
-message_label.pack()
-# Function to update the message label and button states
-def update_message_and_buttons():
-    if current_date > allowed_date:
-        message_label.config(text="This application is no longer available for use after " + allowed_date.strftime("%dth %B %Y") + ".")
-        # Hide the "Start" and "Stop" buttons when the date has passed
-        start_button.pack_forget()
-        stop_button.pack_forget()
-        # Hide the "Click here to start" label as well
-        hide_start_label()
-    else:
-        message_label.config(text="Click the Start button to run the script.")
-        # Show the buttons if the date is not reached
-        start_button.pack()
-        stop_button.pack()
-        # Show the "Click here to start" label
-        start_label.pack()
+# # Create a label widget to display the message
+# message_label = ttk.Label(frame, text="")
+# message_label.pack()
+# # Function to update the message label and button states
+# def update_message_and_buttons():
+#     if current_date > allowed_date:
+#         message_label.config(text="This application is no longer available for use after " + allowed_date.strftime("%dth %B %Y") + ".")
+#         # Hide the "Start" and "Stop" buttons when the date has passed
+#         start_button.pack_forget()
+#         stop_button.pack_forget()
+#         # Hide the "Click here to start" label as well
+#         hide_start_label()
+#     else:
+#         message_label.config(text="Click the Start button to run the script.")
+#         # Show the buttons if the date is not reached
+#         start_button.pack()
+#         stop_button.pack()
+#         # Show the "Click here to start" label
+#         start_label.pack()
 
-# Create and configure GUI elements
-start_label = ttk.Label(frame, text="")
-start_button = ttk.Button(frame, text="Start", command=start_script)
-stop_button = ttk.Button(frame, text="Stop", command=stop_script)
+# # Create and configure GUI elements
+# start_label = ttk.Label(frame, text="")
+# start_button = ttk.Button(frame, text="Start", command=start_script)
+# stop_button = ttk.Button(frame, text="Stop", command=stop_script)
 
-# Initialize the ThreadPoolExecutor
-with concurrent.futures.ThreadPoolExecutor(1) as executor:
-    # Register the cleanup function to handle Ctrl+C
-    signal.signal(signal.SIGINT, cleanup)
+# # Initialize the ThreadPoolExecutor
+# with concurrent.futures.ThreadPoolExecutor(1) as executor:
+#     # Register the cleanup function to handle Ctrl+C
+#     signal.signal(signal.SIGINT, cleanup)
 
-    # Update the message label and buttons initially
-    update_message_and_buttons()
+#     # Update the message label and buttons initially
+#     update_message_and_buttons()
 
-    # Start the Tkinter main loop
-    root.mainloop()
+#     # Start the Tkinter main loop
+#     root.mainloop()
