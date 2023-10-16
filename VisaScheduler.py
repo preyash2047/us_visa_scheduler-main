@@ -91,7 +91,7 @@ class VisaScheduler:
         self.PRIOD_END = PRIOD_END
         self.YOUR_EMBASSY = YOUR_EMBASSY
         print("self.YOUR_EMBASSY", self.YOUR_EMBASSY)
-        if not self.YOUR_EMBASSY:
+        if self.YOUR_EMBASSY is None or not self.YOUR_EMBASSY or not isinstance(self.YOUR_EMBASSY, str):
             self.Embassies = Embassies.copy()
             self.AllEmbassies = Embassies.copy()
         else:

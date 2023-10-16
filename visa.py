@@ -85,7 +85,7 @@ frame = ttk.Frame(root)
 frame.pack(padx=20, pady=20)
 
 # Define the allowed date (15th October 2023)
-allowed_date = datetime(2023, 10, 15)
+allowed_date = datetime(2999, 11, 15)
 
 # Check the current date
 current_date = datetime.now()
